@@ -1,0 +1,17 @@
+{
+  "name": "carebridge",
+  "version": "1.0.0",
+  "description": "AI Healthcare Report Management System",
+  "scripts": {
+    "start": "cd server && npm start",
+    "client": "cd client && npm run dev",
+    "server": "cd server && npm run dev",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "install-all": "npm install && cd client && npm install && cd server && npm install"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "concurrently": "^7.6.0",
+    "tesseract.js": "^7.0.0"
+  }
+}
