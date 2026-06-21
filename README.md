@@ -4,7 +4,7 @@ CareBridge is an AI-powered healthcare report management system. Users can sign 
 
 > "Healthcare feels easier when information feels human."
 
-Created by **Trisha Shetty**, MIT Manipal.
+Created by S**Trisha Shetty**, MIT Manipal.
 
 ## Features
 

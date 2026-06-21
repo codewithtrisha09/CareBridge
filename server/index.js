@@ -1,42 +1,42 @@
 const express = require('express')
-const mongoose = require('mongoose')
 const cors = require('cors')
 const dotenv = require('dotenv')
-const userRoutes = require('./routes/userRoutes')
-const reportRoutes = require('./routes/reportRoutes')
-const medicineRoutes = require('./routes/medicineRoutes')
+const mongoose = require('mongoose')
+const path = require('path')
 
 dotenv.config()
 
 const app = express()
 
+// Middleware
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 
-app.use('/api/auth', userRoutes)
-app.use('/api/reports', reportRoutes)
-app.use('/api/medicines', medicineRoutes)
-app.use('/uploads', express.static('uploads'))
+// Database
+mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/carebridge')
+  .then(() => console.log('✅ MongoDB connected'))
+  .catch(err => console.error('❌ MongoDB error:', err))
 
-app.get('/', (req, res) => {
-  res.json({ message: 'Server running' })
+// Routes
+app.use('/api/auth', require('./routes/userRoutes')) 
+app.use('/api/users', require('./routes/userRoutes'))
+app.use('/api/reports', require('./routes/reportRoutes'))
+app.use('/api/medicines', require('./routes/medicineRoutes'))
+
+// Health check
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'OK', message: 'CAREBRIDGE API is running' })
 })
 
-const mongoUri = process.env.MONGODB_URI || process.env.MONGO_URI
-const port = process.env.PORT || 5000
+// Error handling
+app.use((err, req, res, next) => {
+  console.error(err)
+  res.status(500).json({ message: 'Server error', error: err.message })
+})
 
-if (!mongoUri) {
-  throw new Error('MONGO_URI or MONGODB_URI must be set in server/.env')
-}
-
-mongoose.connect(mongoUri)
-  .then(() => {
-    console.log('MongoDB connected')
-    app.listen(port, () => {
-      console.log(`Server running on port ${port}`)
-    })
-  })
-  .catch(err => console.error(err))
-
-module.exports = app
+const PORT = process.env.PORT || 5000
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`)
+})
