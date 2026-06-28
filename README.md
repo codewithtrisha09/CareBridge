@@ -183,6 +183,5 @@ The application will be available at:
 
 For issues, questions, or feature requests, please [open an issue](https://github.com/yourusername/carebridge/issues) or contact the development team.
 
----
 
 **CareBridge – Making Healthcare Information Accessible to Everyone**
